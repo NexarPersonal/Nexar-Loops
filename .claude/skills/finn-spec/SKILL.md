@@ -89,8 +89,23 @@ issue on the configured `NEX` Linear team (via the Linear connector) with
 the draft as the body. Report the exact issue identifier and URL returned by
 Linear; later skills use that identifier rather than guessing it.
 
-## Hard rule
+## 5. Approval gate
 
-Never apply the `agent-ready` label. The user applies it in Linear after a
-final read — that label is the approval gate between "idea" and "an agent
-builds it".
+`agent-ready` is the gate between "idea" and "an agent builds it". Never
+apply it silently, and never treat the draft go-ahead in step 4 as approval —
+they are two separate decisions.
+
+After filing and reporting the issue identifier, ask the user one explicit
+question in chat:
+
+> Ska jag märka NEX-NNN som `agent-ready` så buildern får plocka den?
+
+- An explicit yes in this session → apply the `agent-ready` label via the
+  Linear connector, re-read the issue, and confirm the label stuck.
+- Anything else — defer, doubt, no answer — → leave the label off and tell
+  the user they can apply it later in Linear (open the issue, press `L`,
+  choose `agent-ready`).
+
+The decision is always the human's; this skill only executes it. Never apply
+the label for an issue filed in an earlier session without re-showing its
+current contract first.

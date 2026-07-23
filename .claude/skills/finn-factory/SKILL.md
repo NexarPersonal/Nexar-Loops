@@ -39,8 +39,8 @@ Efter varje pass avgörs nästa steg:
 
 - Något steg utförde arbete → nästa pass om 5–10 minuter.
 - Rundan var tom men något väntar på människan — ett merge-ready-meddelande
-  utan 🚀, eller en `blocked`-issue utan svar → fortsätt glest (~30 minuter);
-  fabriken är i vänteläge, inte klar.
+  utan 🚀, en `blocked`-issue utan svar, eller en öppen PR med `loop-stuck`
+  → fortsätt glest (~30 minuter); fabriken är i vänteläge, inte klar.
 - Rundan var tom och inget väntar på människan i vare sig Slack, GitHub
   eller Linear → dagens arbete är klart: stoppa loopen och sammanfatta vad
   som byggdes, granskades och mergades under dagen.

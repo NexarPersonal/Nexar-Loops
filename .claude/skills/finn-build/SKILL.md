@@ -29,7 +29,9 @@ gh pr list --state open --label loop-changes-requested --json number,title,headR
 ```
 
 Skip every PR carrying `needs-human-review`; it has left the automated repair
-queue until a human resolves the escalation.
+queue until a human resolves the escalation. Likewise skip every PR carrying
+`loop-stuck`; it is stopped after two failed fix rounds and returns to the
+queue only when a human removes that label.
 
 If any PR remains, choose the least recently updated one. Read its linked
 Linear issue and latest `Finn-loop review of COMMIT_SHA` verdict. Check out its

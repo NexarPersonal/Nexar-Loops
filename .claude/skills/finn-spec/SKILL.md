@@ -17,6 +17,11 @@ Read the relevant code first. Find which files are involved, what patterns
 already exist, and what constraints apply. Never ask the user something the
 codebase can answer.
 
+Also read `RIKTNING.md` in the repo root: its "Beslutade policyer" section
+holds standing decisions — never ask about those; fold them into the draft
+and note which policy applied. Genuine product decisions for the feature at
+hand are never defaulted, no matter how obvious they seem.
+
 ## 2. Interview in rounds
 
 Ask 1-4 questions per round, each with concrete options and your recommended

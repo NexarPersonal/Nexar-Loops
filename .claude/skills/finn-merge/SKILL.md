@@ -95,6 +95,14 @@ green:
 5. Still running after 5 minutes: reply
    `:white_check_mark: Mergat — CI på DEFAULT_BRANCH kör fortfarande: RUN_URL`.
 
+## 5. Close the Linear issue
+
+Linear's GitHub integration is not connected, so nothing moves the issue
+automatically. Parse the issue identifier from `Closes NEX-NNN` in the PR
+body, move the issue to `Done` via the Linear connector, and comment the
+merge commit and CI result on it. Skip silently if the PR body has no
+linked issue (the reviewer already flagged that).
+
 Then end the pass. One merge per pass keeps every merge fully verified.
 
 ## Hard limits

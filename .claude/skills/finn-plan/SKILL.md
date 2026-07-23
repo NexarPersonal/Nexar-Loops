@@ -47,11 +47,11 @@ kan plockas före sin blockerare.
 Rapportera: filade issues (identifierare och länk), vilka som fick
 `agent-ready`, och vad som väntar på svar från användaren.
 
-Fråga sedan om fabriken ska startas: erbjud att köra
-`/loop 10m /finn-factory` direkt i den här sessionen (en orkestratorloop
-som kör build → review → merge med färska subagenter varje varv). Starta
-bara efter ett explicit ja. Kör fabriksloopen redan, säg det istället för
-att fråga.
+Fråga sedan om fabriken ska startas: erbjud att köra `/loop /finn-factory`
+direkt i den här sessionen — en självpacande orkestratorloop som kör
+build → review → merge med färska subagenter tills dagens arbete är klart
+och sedan stoppar sig själv. Starta bara efter ett explicit ja. Kör
+fabriksloopen redan, säg det istället för att fråga.
 
 ## Hårda regler
 

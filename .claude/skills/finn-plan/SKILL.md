@@ -45,8 +45,13 @@ kan plockas före sin blockerare.
 ## 4. Avsluta med dagspaketet
 
 Rapportera: filade issues (identifierare och länk), vilka som fick
-`agent-ready`, och vad som väntar på svar från användaren. Påminn om att
-starta looparna om de inte redan kör.
+`agent-ready`, och vad som väntar på svar från användaren.
+
+Fråga sedan om fabriken ska startas: erbjud att köra
+`/loop 10m /finn-factory` direkt i den här sessionen (en orkestratorloop
+som kör build → review → merge med färska subagenter varje varv). Starta
+bara efter ett explicit ja. Kör fabriksloopen redan, säg det istället för
+att fråga.
 
 ## Hårda regler
 

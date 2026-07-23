@@ -53,6 +53,10 @@ build → review → merge med färska subagenter tills dagens arbete är klart
 och sedan stoppar sig själv. Starta bara efter ett explicit ja. Kör
 fabriksloopen redan, säg det istället för att fråga.
 
+Efter start: posta en startrad till `#notifs-factory` (ID `C0BK2JYC5GT`)
+via Slack-connectorn med dagens paket, t.ex. "Fabriken startad — 3 issues
+i kön: NEX-810, NEX-811, NEX-812."
+
 ## Hårda regler
 
 - Planera; starta aldrig finn-build, finn-review eller finn-merge härifrån.

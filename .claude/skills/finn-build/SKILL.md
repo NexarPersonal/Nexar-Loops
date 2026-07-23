@@ -42,6 +42,20 @@ do not implement it. Comment the exact conflict, add `needs-human-review`,
 remove `loop-changes-requested`, and end the pass. This prevents the next loop
 iteration from retrying a decision only a human can make.
 
+## 1b. Apply founder answers to blocked issues
+
+Read recent history in Slack channel `#notifs-factory` (ID `C0BK2JYC5GT`)
+via the Slack connector; skip this step silently if the connector is
+unavailable. For each bot message starting with `Blockerad: NEX-NNN` whose
+thread has a reply from the authorized founder (Slack ID `U0B5SMLT491`) and
+no bot reply starting with `Infört`:
+
+1. Copy the founder's answer as a comment on the Linear issue.
+2. Remove the `blocked` label so the issue returns to the queue.
+3. Reply in the thread: `Infört i NEX-NNN — ärendet är åter i kön.`
+
+These are quick; handle all pending ones, then continue the pass.
+
 ## 2. Pick
 
 Using the Linear connector, list issues on team `NEX` that meet every
@@ -125,3 +139,13 @@ a human answers and removes that label.
 Never use "this is unclear" as the question. State the exact decision, the
 available options, and which acceptance criterion it affects. End the pass so
 the next iteration can pick different work.
+
+If the Slack connector is available, also post the question to
+`#notifs-factory` (ID `C0BK2JYC5GT`) so the founder can answer from anywhere:
+
+```text
+:no_entry: Blockerad: NEX-NNN — TITLE
+ISSUE_URL
+Fråga: THE_EXACT_QUESTION
+Svara i tråden så förs svaret in i Linear och bygget återupptas automatiskt.
+```

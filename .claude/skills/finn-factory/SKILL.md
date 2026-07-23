@@ -45,6 +45,15 @@ Efter varje pass avgörs nästa steg:
   eller Linear → dagens arbete är klart: stoppa loopen och sammanfatta vad
   som byggdes, granskades och mergades under dagen.
 
+Statusuppdateringar till `#notifs-factory` (ID `C0BK2JYC5GT`), via
+Slack-connectorn:
+
+- Vid övergång till vänteläge: posta EN rad om exakt vad fabriken väntar på
+  (t.ex. "Vänteläge — PR #4 väntar på 🚀, NEX-810 väntar på svar i tråden
+  ovan"). Upprepa inte medan läget är oförändrat.
+- När loopen stoppar: posta dagssammanfattningen dit.
+- Posta inget per varv — tystnad betyder att arbete pågår.
+
 ## Regler
 
 - Orkestratorn ändrar aldrig kod, labels eller state själv — bara

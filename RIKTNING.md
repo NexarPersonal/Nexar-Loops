@@ -38,5 +38,4 @@ för nya features defaultas aldrig — de frågas alltid.
 ## Inte nu
 
 - Auto-merge utan 🚀-reaktion — människan förblir merge-gaten.
-- Watchdog — byggs efter att /finn-status finns och kövolymen motiverar den.
 - (fyll på med sådant som medvetet får vänta)

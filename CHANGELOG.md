@@ -6,6 +6,16 @@ sektioner dateras istället för att versionsnumreras.
 
 ## Ej släppt
 
+### Tillagt
+
+- Loop-stuck-spärr (NEX-803): GitHub-labeln `loop-stuck`; `finn-review`
+  stoppar en PR när ett nytt must-fix-verdikt skulle bli det tredje i raden
+  (två misslyckade fixrundor), sätter `loop-stuck` + `needs-human-review`
+  och larmar med en `Fastnad:`-rad i `#notifs-factory`; `finn-build` och
+  `finn-review` hoppar över stoppade PR:ar tills en människa tar bort
+  labeln (räkningen nollställs då), och `finn-factory` räknar dem som
+  vänteläge istället för "dagen klar".
+
 ## 2026-07-23
 
 ### Tillagt

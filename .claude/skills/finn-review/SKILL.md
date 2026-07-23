@@ -13,7 +13,13 @@ One pass = one PR reviewed. Under `/loop`, each iteration runs this skill once.
 gh pr list --state open --json number,title,labels,isDraft,headRefOid,updatedAt,url
 ```
 
-Skip drafts. For each PR, find the latest comment whose first line is
+Skip drafts. Skip every PR carrying `loop-stuck`: it has been stopped after
+two failed fix rounds and stays out of the review queue until a human removes
+the label. When a human removes `loop-stuck`, the fix-round count restarts
+from zero — verdicts posted before the removal are never counted again
+(step 4 enforces this via the label timeline).
+
+For each remaining PR, find the latest comment whose first line is
 `Finn-loop review of COMMIT_SHA`.
 
 Skip a PR when that recorded SHA equals its current `headRefOid` and it already
@@ -65,7 +71,50 @@ Review the exact `headRefOid` used for this evidence. Re-fetch it immediately
 before posting. If it changed, discard the review and start again on a future
 pass.
 
-## 4. Post one verdict
+## 4. Loop-stuck brake (two failed fix rounds)
+
+Runs only when the verdict about to be posted contains must-fix findings.
+Count the earlier failed fix rounds on this PR:
+
+1. Collect every existing comment whose first line is
+   `Finn-loop review of COMMIT_SHA` and whose "Must fix before merge" section
+   lists at least one finding.
+2. Keep only verdicts recorded on a head SHA different from the current
+   `headRefOid` — the same SHA is never counted twice.
+3. Fetch the PR's label timeline
+   (`gh api repos/OWNER/REPO/issues/NUMBER/timeline --paginate`) and find the
+   most recent `unlabeled` event for `loop-stuck`. Keep only verdicts posted
+   after that event; if `loop-stuck` was never removed, keep them all. A
+   human's label removal therefore resets the count to zero.
+
+If two such verdicts remain, the verdict about to be posted would be the third
+must-fix in a row — two fix rounds have already failed. Stop the PR instead of
+sending it back to the builder:
+
+- Add `loop-stuck` and `needs-human-review`; remove `loop-approved` and
+  `loop-changes-requested` (check existing labels first, as in step 5).
+- Say in the verdict that the PR has been stopped and why: two fix rounds
+  failed, listing the counted verdict SHAs. Set "Safe to merge" to
+  `No — stopped after two failed fix rounds; a human must take over.`
+- Post the Slack alert below, then end the pass.
+
+Slack alert — uses the Slack connector (`slack_read_channel`,
+`slack_send_message`). If the connector is unavailable in this session, skip
+this alert silently, exactly like the other Slack steps. Channel:
+`#notifs-factory`, ID `C0BK2JYC5GT`. Post one message:
+
+```text
+:warning: Fastnad: PR #NUMBER — TITLE
+PR_URL
+SHA: FULL_HEAD_SHA
+Läs senaste verdiktet, åtgärda eller stäng PR:en, och ta bort `loop-stuck` + `needs-human-review` för att återuppta loopen.
+```
+
+Idempotency: first read the channel's recent history (`slack_read_channel`,
+~100 messages). If a `Fastnad: PR #NUMBER` message with the same SHA already
+exists, do not post again.
+
+## 5. Post one verdict
 
 Post one comment in this structure:
 
@@ -98,7 +147,10 @@ them so an absent label does not fail the command:
 - No must-fix and no new escalation: add `loop-approved`; remove
   `loop-changes-requested`. Preserve a pre-existing `needs-human-review` label
   because it may represent a separate high-risk human gate.
-- Must-fix present: add `loop-changes-requested`; remove `loop-approved`.
+- Must-fix present and the loop-stuck brake (step 4) did not fire: add
+  `loop-changes-requested`; remove `loop-approved`.
+- Must-fix present and the brake fired: the labels set in step 4 stand
+  (`loop-stuck` + `needs-human-review`); never add `loop-changes-requested`.
 - Scope conflict or no required CI: add `needs-human-review`; remove both
   `loop-approved` and `loop-changes-requested`; set "Safe to merge" to
   `No — human decision required.`
@@ -108,7 +160,7 @@ must resolve the reason, change the issue or repository configuration as
 needed, and remove `needs-human-review` before Finn-loop reviews that unchanged
 commit again.
 
-## 5. Slack merge-ready notice
+## 6. Slack merge-ready notice
 
 Runs only when the verdict just applied `loop-approved`. Uses the Slack
 connector (`slack_read_channel`, `slack_send_message`). If the Slack
@@ -136,7 +188,7 @@ Idempotency and supersession, in order:
    `Ersatt — ny head SHA: FULL_HEAD_SHA` before posting the new message, so a
    stale 🚀 can never authorize an outdated commit.
 
-## 6. Hard limits
+## 7. Hard limits
 
 - Never merge or enable auto-merge.
 - Never push commits to the PR branch.
